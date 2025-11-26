@@ -33,6 +33,8 @@ export default function NewProjectPage() {
 }
 
 function NewProjectContent() {
+    const searchParams = useSearchParams()
+    const router = useRouter()
     const [prompt, setPrompt] = useState("")
     const [imageFile, setImageFile] = useState<File | null>(null)
     const [style, setStyle] = useState("Modern Clean")
@@ -48,8 +50,18 @@ function NewProjectContent() {
 
     const [showPreview, setShowPreview] = useState(false)
     const [activeTab, setActiveTab] = useState("text")
+    const [selectedComponent, setSelectedComponent] = useState("")
+    const [componentPrompt, setComponentPrompt] = useState("")
     const [isPublished, setIsPublished] = useState(false)
     const [loadingStep, setLoadingStep] = useState(0)
+
+    // Check for tab parameter in URL
+    useEffect(() => {
+        const tab = searchParams.get('tab')
+        if (tab === 'screenshot') {
+            setActiveTab('screenshot')
+        }
+    }, [searchParams])
 
     // Derived state for backward compatibility
     const generatedHtml = variants[activeVariant]?.html || ""
@@ -84,7 +96,7 @@ function NewProjectContent() {
             [activeVariant]: { ...prev[activeVariant]!, redoHistory: fn(prev[activeVariant]!.redoHistory) }
         }))
     }
-    const searchParams = useSearchParams()
+
 
     // Template definitions
     const templates: Record<string, { prompt: string, style: string }> = {

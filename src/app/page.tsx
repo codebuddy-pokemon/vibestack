@@ -325,7 +325,7 @@ export default function LandingPage() {
           </Link>
 
           {/* Feature 2: Screenshot to Code */}
-          <Link href="/projects/new" className="md:col-span-1 row-span-1 block">
+          <Link href="/projects/new?tab=screenshot" className="md:col-span-1 row-span-1 block">
             <motion.div
               variants={item}
               className="h-full relative group overflow-hidden bg-card border border-border hover:border-theme-accent transition-all duration-500 cursor-pointer hover:shadow-[var(--glow-md)]"

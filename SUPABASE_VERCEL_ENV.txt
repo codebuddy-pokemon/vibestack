@@ -11,16 +11,17 @@ DIRECT_URL="postgresql://postgres.dukaqdwwjaxpfphdmyfw:%40nonymousHack3r12345%3D
 NEXT_PUBLIC_SUPABASE_URL="https://dukaqdwwjaxpfphdmyfw.supabase.co"
 NEXT_PUBLIC_SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR1a2FxZHd3amF4cGZwaGRteWZ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQxNzkxNjEsImV4cCI6MjA3OTc1NTE2MX0.dHFkKvxZ4eholR6nzS-OMnORFeZoVI1rDj7icwb_P_g"
 
-# ------------------------------------------------------------------
-# 🚀 AUTOMATED DEPLOYMENT SETUP (Recommended)
-# ------------------------------------------------------------------
-# Since we are using SQLite locally but Postgres in production, 
-# we need Vercel to use the Postgres schema.
+# NextAuth Secret (Generated for you)
+NEXTAUTH_SECRET="J/8qL9zXy5+1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p="
 
-# 1. Go to Vercel Dashboard -> Settings -> General
-# 2. Scroll to "Build & Development Settings"
-# 3. Toggle "Override" for "Build Command"
-# 4. Enter this command:
-#    cp prisma/schema.prisma.postgres prisma/schema.prisma && npx prisma generate && next build
+# ------------------------------------------------------------------
+# 🚀 AUTOMATED DEPLOYMENT SETUP (UPDATED)
+# ------------------------------------------------------------------
+# I have updated `package.json` to automatically handle the schema swap!
 
-# This ensures Vercel always uses the correct Postgres schema!
+# YOU DO NOT NEED TO CHANGE THE BUILD COMMAND IN VERCEL.
+
+# Just:
+# 1. Add the Environment Variables above.
+# 2. Push the latest code to GitHub.
+# 3. Vercel will detect the "VERCEL" environment variable and swap the schema automatically.

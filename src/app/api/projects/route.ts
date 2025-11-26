@@ -5,6 +5,9 @@ import { prisma } from "@/lib/db"
 
 export async function POST(req: Request) {
     try {
+        console.log("[API] DATABASE_URL exists:", !!process.env.DATABASE_URL);
+        console.log("[API] DATABASE_URL prefix:", process.env.DATABASE_URL?.substring(0, 15));
+
         const session = await getServerSession(authOptions)
 
         // Skip auth in development AND production temporarily for testing

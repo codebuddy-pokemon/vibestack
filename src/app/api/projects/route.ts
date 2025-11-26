@@ -19,7 +19,8 @@ export async function POST(req: Request) {
         const { name, description, inputType, inputData, html, css, metadata, vibeScore, styleType } = body
 
         // Use session user ID or dummy ID
-        const userId = session?.user?.id || "temp-prod-user-id"
+        // FORCE TEMP USER for debugging
+        const userId = "temp-prod-user-id";
         console.log("[API] Creating project for user:", userId);
 
         const project = await prisma.project.create({
@@ -38,11 +39,20 @@ export async function POST(req: Request) {
         })
         console.log("[API] Project created successfully:", project.id);
 
-        // Parse back for response
+        // Parse back for response safely
+        const safeParse = (val: string | null) => {
+            if (!val) return null;
+            try {
+                return JSON.parse(val);
+            } catch (e) {
+                return val; // Return as is if not valid JSON
+            }
+        };
+
         const responseProject = {
             ...project,
-            inputData: project.inputData ? JSON.parse(project.inputData as string) : null,
-            metadata: project.metadata ? JSON.parse(project.metadata as string) : null,
+            inputData: safeParse(project.inputData),
+            metadata: safeParse(project.metadata),
         }
 
         return NextResponse.json(responseProject)

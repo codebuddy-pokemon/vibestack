@@ -6,8 +6,8 @@ generator client {
 
 datasource db {
   provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  url       = "postgresql://postgres.dukaqdwwjaxpfphdmyfw:%40nonymousHack3r12345%3D@aws-1-ap-southeast-2.pooler.supabase.com:6543/postgres?pgbouncer=true"
+  directUrl = "postgresql://postgres.dukaqdwwjaxpfphdmyfw:%40nonymousHack3r12345%3D@aws-1-ap-southeast-2.pooler.supabase.com:5432/postgres"
 }
 
 // NOTE: We use String for JSON fields and Enums to maintain compatibility with SQLite local dev

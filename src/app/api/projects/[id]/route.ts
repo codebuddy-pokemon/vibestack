@@ -26,7 +26,13 @@ export async function GET(
             return new NextResponse("Project not found", { status: 404 })
         }
 
-        return NextResponse.json(project)
+        const parsedProject = {
+            ...project,
+            inputData: project.inputData ? JSON.parse(project.inputData as string) : null,
+            metadata: project.metadata ? JSON.parse(project.metadata as string) : null,
+        }
+
+        return NextResponse.json(parsedProject)
     } catch (error) {
         console.error("[PROJECT_GET]", error)
         return new NextResponse("Internal Error", { status: 500 })
@@ -57,7 +63,7 @@ export async function PATCH(
                 description,
                 html,
                 css,
-                metadata,
+                metadata: typeof metadata === 'object' ? JSON.stringify(metadata) : metadata,
                 vibeScore,
                 styleType,
                 isPublic,
@@ -65,7 +71,13 @@ export async function PATCH(
             },
         })
 
-        return NextResponse.json(project)
+        const parsedProject = {
+            ...project,
+            inputData: project.inputData ? JSON.parse(project.inputData as string) : null,
+            metadata: project.metadata ? JSON.parse(project.metadata as string) : null,
+        }
+
+        return NextResponse.json(parsedProject)
     } catch (error) {
         console.error("[PROJECT_PATCH]", error)
         return new NextResponse("Internal Error", { status: 500 })

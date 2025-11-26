@@ -1,0 +1,26 @@
+# Vercel Environment Variables for Supabase
+# Add these in Vercel Dashboard -> Settings -> Environment Variables
+
+# Supabase Database (Transaction Pooler - Port 6543)
+DATABASE_URL="postgresql://postgres.dukaqdwwjaxpfphdmyfw:%40nonymousHack3r12345%3D@aws-1-ap-southeast-2.pooler.supabase.com:6543/postgres?pgbouncer=true"
+
+# Direct Connection (Session Pooler - Port 5432)
+DIRECT_URL="postgresql://postgres.dukaqdwwjaxpfphdmyfw:%40nonymousHack3r12345%3D@aws-1-ap-southeast-2.pooler.supabase.com:5432/postgres"
+
+# Supabase Public URL & Key
+NEXT_PUBLIC_SUPABASE_URL="https://dukaqdwwjaxpfphdmyfw.supabase.co"
+NEXT_PUBLIC_SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR1a2FxZHd3amF4cGZwaGRteWZ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQxNzkxNjEsImV4cCI6MjA3OTc1NTE2MX0.dHFkKvxZ4eholR6nzS-OMnORFeZoVI1rDj7icwb_P_g"
+
+# ------------------------------------------------------------------
+# 🚀 AUTOMATED DEPLOYMENT SETUP (Recommended)
+# ------------------------------------------------------------------
+# Since we are using SQLite locally but Postgres in production, 
+# we need Vercel to use the Postgres schema.
+
+# 1. Go to Vercel Dashboard -> Settings -> General
+# 2. Scroll to "Build & Development Settings"
+# 3. Toggle "Override" for "Build Command"
+# 4. Enter this command:
+#    cp prisma/schema.prisma.postgres prisma/schema.prisma && npx prisma generate && next build
+
+# This ensures Vercel always uses the correct Postgres schema!

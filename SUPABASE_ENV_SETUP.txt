@@ -1,0 +1,25 @@
+# Copy these to your .env.local file
+# Location: /Users/bilalhamza/.gemini/antigravity/scratch/vibestack/.env.local
+
+# Supabase Database
+DATABASE_URL="postgresql://postgres:@nonymousHack3r123@db.dukaqqdwwjaxpfphdmyfw.supabase.co:6543/postgres?pgbouncer=true"
+DIRECT_URL="postgresql://postgres:@nonymousHack3r123@db.dukaqqdwwjaxpfphdmyfw.supabase.co:5432/postgres"
+
+# Supabase Public
+NEXT_PUBLIC_SUPABASE_URL="https://dukaqdwwjaxpfphdmyfw.supabase.co"
+NEXT_PUBLIC_SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR1a2FxZHd3amF4cGZwaGRteWZ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQxNzkxNjEsImV4cCI6MjA3OTc1NTE2MX0.dHFkKvxZ4eholR6nzS-OMnORFeZoVI1rDj7icwb_P_g"
+
+# Gemini AI (replace with your actual key)
+GEMINI_API_KEY="your-gemini-api-key-here"
+
+# NextAuth (replace with your actual values)
+NEXTAUTH_SECRET="your-nextauth-secret-here"
+NEXTAUTH_URL="http://localhost:3000"
+
+# Instructions:
+# 1. Copy all lines above (except comments starting with #)
+# 2. Open .env.local in your editor
+# 3. Paste these variables
+# 4. Replace the placeholder values for GEMINI_API_KEY and NEXTAUTH_SECRET with your actual values
+# 5. Save the file
+# 6. Run: npx prisma db push

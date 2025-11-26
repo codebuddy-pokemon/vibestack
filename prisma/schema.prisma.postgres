@@ -23,7 +23,7 @@ model User {
   stripeSubscriptionId   String?   @unique
   stripePriceId          String?
   stripeCurrentPeriodEnd DateTime?
-  plan                   String    @default("FREE") // Enum: FREE, PRO, AGENCY
+  plan                   Plan      @default(FREE)
   
   // Relations
   accounts      Account[]
@@ -33,18 +33,24 @@ model User {
   exports       Export[]
 }
 
+enum Plan {
+  FREE
+  PRO
+  AGENCY
+}
+
 model Account {
   id                String  @id @default(cuid())
   userId            String
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? 
-  access_token      String? 
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? 
+  id_token          String? @db.Text
   session_state     String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -67,13 +73,13 @@ model Project {
   description String?
   
   // Input data
-  inputType   String   // Enum: TEXT, SCREENSHOT, SKETCH, URL, PALETTE
-  inputData   String   // JSON string: Stores screenshot URL, text prompt, or URL
+  inputType   InputType
+  inputData   Json      // Stores screenshot URL, text prompt, or URL
   
   // Generated output
-  html        String   
-  css         String   
-  metadata    String   // JSON string: Colors, fonts, layout structure
+  html        String    @db.Text
+  css         String    @db.Text
+  metadata    Json      // Colors, fonts, layout structure
   
   // Vibe scoring
   vibeScore   Int?      // 0-100
@@ -95,6 +101,14 @@ model Project {
   @@index([isPublic])
 }
 
+enum InputType {
+  TEXT
+  SCREENSHOT
+  SKETCH
+  URL
+  PALETTE
+}
+
 model Template {
   id          String   @id @default(cuid())
   userId      String?
@@ -102,9 +116,9 @@ model Template {
   description String?
   thumbnail   String
   
-  html        String   
-  css         String   
-  metadata    String   // JSON string
+  html        String   @db.Text
+  css         String   @db.Text
+  metadata    Json
   
   styleType   String
   isPremium   Boolean  @default(false)
@@ -126,7 +140,7 @@ model Export {
   userId    String
   projectId String
   
-  format    String   // Enum: HTML, REACT, NEXTJS, ZIP
+  format    ExportFormat
   fileUrl   String?
   
   createdAt DateTime @default(now())
@@ -135,4 +149,11 @@ model Export {
   project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
   
   @@index([userId])
+}
+
+enum ExportFormat {
+  HTML
+  REACT
+  NEXTJS
+  ZIP
 }

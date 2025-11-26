@@ -24,16 +24,23 @@ export async function POST(req: Request) {
                 name,
                 description,
                 inputType,
-                inputData,
+                inputData: typeof inputData === 'object' ? JSON.stringify(inputData) : inputData,
                 html,
                 css,
-                metadata,
+                metadata: typeof metadata === 'object' ? JSON.stringify(metadata) : metadata,
                 vibeScore,
                 styleType,
             },
         })
 
-        return NextResponse.json(project)
+        // Parse back for response
+        const responseProject = {
+            ...project,
+            inputData: project.inputData ? JSON.parse(project.inputData as string) : null,
+            metadata: project.metadata ? JSON.parse(project.metadata as string) : null,
+        }
+
+        return NextResponse.json(responseProject)
     } catch (error) {
         console.error("[PROJECTS_POST]", error)
         return new NextResponse("Internal Error", { status: 500 })
@@ -56,7 +63,13 @@ export async function GET(req: Request) {
             },
         })
 
-        return NextResponse.json(projects)
+        const parsedProjects = projects.map(p => ({
+            ...p,
+            inputData: p.inputData ? JSON.parse(p.inputData as string) : null,
+            metadata: p.metadata ? JSON.parse(p.metadata as string) : null,
+        }))
+
+        return NextResponse.json(parsedProjects)
     } catch (error) {
         console.error("[PROJECTS_GET]", error)
         return new NextResponse("Internal Error", { status: 500 })

@@ -124,15 +124,27 @@ export default function BrandMatchPage() {
                 {result && (
                     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-8 duration-700">
                         {/* Vibe Description */}
-                        <Card className="border-none bg-gradient-to-br from-blue-500/10 to-cyan-500/5 backdrop-blur-xl overflow-hidden relative shadow-2xl">
-                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-cyan-500 to-blue-500 animate-gradient bg-[length:200%_auto]" />
-                            <CardHeader>
-                                <CardTitle className="text-sm font-bold uppercase tracking-widest text-blue-500">Brand Vibe</CardTitle>
+                        <Card className="border border-blue-500/20 bg-card backdrop-blur-xl overflow-hidden relative shadow-xl">
+                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-cyan-500 to-blue-500" />
+
+                            <CardHeader className="border-b border-border/50 pb-4">
+                                <div className="flex items-center gap-3">
+                                    <div className="p-2 rounded-lg bg-blue-500/10 border border-blue-500/20">
+                                        <Palette className="w-5 h-5 text-blue-500" />
+                                    </div>
+                                    <div>
+                                        <CardTitle className="text-lg font-bold text-foreground">Brand Vibe</CardTitle>
+                                        <p className="text-xs text-muted-foreground mt-0.5">AI-Detected Aesthetic</p>
+                                    </div>
+                                </div>
                             </CardHeader>
-                            <CardContent>
-                                <p className="text-2xl md:text-4xl leading-tight font-medium italic text-white/90 font-heading">
-                                    "{result.vibe}"
-                                </p>
+
+                            <CardContent className="pt-6 pb-6">
+                                <blockquote className="border-l-4 border-blue-500 pl-6 pr-4 py-2">
+                                    <p className="text-base md:text-lg leading-relaxed text-foreground/90 italic">
+                                        {result.vibe}
+                                    </p>
+                                </blockquote>
                             </CardContent>
                         </Card>
 

@@ -137,7 +137,7 @@ export default function VibeCheckPage() {
                                 <CardTitle className="text-sm font-bold uppercase tracking-widest text-purple-500">AI Analysis</CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <p className="text-2xl leading-relaxed text-muted-foreground font-light">
+                                <p className="text-lg md:text-xl leading-relaxed text-foreground font-normal">
                                     {vibeResult.explanation}
                                 </p>
                             </CardContent>

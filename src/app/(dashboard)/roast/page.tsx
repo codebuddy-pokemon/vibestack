@@ -1,10 +1,36 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Loader2, Upload, Flame, AlertTriangle, CheckCircle2, ArrowRight } from "lucide-react"
 import { toast } from "sonner"
+
+// Animated Score Counter Component
+function AnimatedScore({ score }: { score: number }) {
+    const [displayScore, setDisplayScore] = useState(0)
+
+    useEffect(() => {
+        let start = 0
+        const end = score
+        const duration = 1500 // 1.5 seconds
+        const increment = end / (duration / 16) // 60fps
+
+        const timer = setInterval(() => {
+            start += increment
+            if (start >= end) {
+                setDisplayScore(end)
+                clearInterval(timer)
+            } else {
+                setDisplayScore(Math.floor(start))
+            }
+        }, 16)
+
+        return () => clearInterval(timer)
+    }, [score])
+
+    return <>{displayScore}</>
+}
 
 export default function RoastPage() {
     const [imageFile, setImageFile] = useState<File | null>(null)
@@ -121,17 +147,29 @@ export default function RoastPage() {
                 {roastResult && (
                     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-8 duration-700">
                         {/* The Verdict */}
-                        <Card className="border-none bg-black/40 backdrop-blur-xl overflow-hidden relative shadow-2xl">
-                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-500 via-orange-500 to-red-500 animate-gradient bg-[length:200%_auto]" />
-                            <CardHeader className="pb-2">
-                                <CardTitle className="text-sm font-bold uppercase tracking-widest text-red-500 flex items-center gap-2">
-                                    <AlertTriangle className="w-4 h-4" /> The Verdict
-                                </CardTitle>
+                        <Card className="border border-red-500/20 bg-card backdrop-blur-xl overflow-hidden relative shadow-xl">
+                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-500 via-orange-500 to-red-500" />
+
+                            <CardHeader className="border-b border-border/50 pb-4">
+                                <div className="flex items-center gap-3">
+                                    <div className="p-2 rounded-lg bg-red-500/10 border border-red-500/20">
+                                        <Flame className="w-5 h-5 text-red-500" />
+                                    </div>
+                                    <div>
+                                        <CardTitle className="text-lg font-bold text-foreground">The Roast</CardTitle>
+                                        <p className="text-xs text-muted-foreground mt-0.5">AI-Generated Feedback</p>
+                                    </div>
+                                </div>
                             </CardHeader>
-                            <CardContent>
-                                <p className="text-2xl md:text-4xl leading-tight font-medium italic text-white/90 font-heading">
-                                    "{roastResult.roast}"
-                                </p>
+
+                            <CardContent className="pt-6 pb-6">
+                                <blockquote className="border-l-4 border-red-500 pl-6 pr-4 py-2 space-y-4">
+                                    {roastResult.roast.split(/\.\s+/).filter((sentence: string) => sentence.trim()).map((sentence: string, i: number) => (
+                                        <p key={i} className="text-base md:text-lg leading-relaxed text-foreground/90">
+                                            {sentence.trim()}{sentence.trim().endsWith('.') ? '' : '.'}
+                                        </p>
+                                    ))}
+                                </blockquote>
                             </CardContent>
                         </Card>
 
@@ -143,10 +181,10 @@ export default function RoastPage() {
                                 </CardHeader>
                                 <CardContent className="flex items-center justify-center py-12">
                                     <div className="relative group cursor-default">
-                                        <div className="text-9xl font-black tracking-tighter bg-gradient-to-b from-white to-white/50 bg-clip-text text-transparent group-hover:scale-110 transition-transform duration-500">
-                                            {roastResult.score}
+                                        <div className="text-9xl font-black tracking-tighter bg-gradient-to-b from-foreground to-foreground/50 bg-clip-text text-transparent animate-in zoom-in duration-700">
+                                            <AnimatedScore score={roastResult.score} />
                                         </div>
-                                        <div className="absolute -top-6 -right-10 text-3xl font-bold text-white/20 rotate-12">
+                                        <div className="absolute -top-6 -right-10 text-3xl font-bold text-muted-foreground rotate-12 animate-in fade-in slide-in-from-right duration-500 delay-700">
                                             /100
                                         </div>
                                     </div>
@@ -159,13 +197,13 @@ export default function RoastPage() {
                                     <CardTitle className="text-sm font-bold uppercase tracking-widest text-muted-foreground">Quick Fixes</CardTitle>
                                 </CardHeader>
                                 <CardContent>
-                                    <ul className="space-y-4">
+                                    <ul className="space-y-3">
                                         {roastResult.improvements?.map((item: string, i: number) => (
-                                            <li key={i} className="flex items-start gap-4 p-4 rounded-xl bg-white/5 hover:bg-white/10 transition-colors group">
-                                                <div className="mt-1 min-w-6 min-h-6 rounded-full bg-red-500/20 border border-red-500/30 flex items-center justify-center group-hover:bg-red-500 group-hover:text-white transition-colors duration-300">
+                                            <li key={i} className="flex items-start gap-3 p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-colors group">
+                                                <div className="mt-0.5 min-w-6 min-h-6 rounded-full bg-red-500/20 border border-red-500/30 flex items-center justify-center group-hover:bg-red-500 transition-colors duration-300">
                                                     <span className="text-xs font-bold text-red-500 group-hover:text-white">{i + 1}</span>
                                                 </div>
-                                                <span className="text-base font-medium text-white/80 group-hover:text-white transition-colors">{item}</span>
+                                                <span className="text-sm md:text-base leading-relaxed text-foreground/90 group-hover:text-foreground transition-colors">{item}</span>
                                             </li>
                                         ))}
                                     </ul>

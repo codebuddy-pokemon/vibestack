@@ -17,6 +17,7 @@ export async function POST(req: Request) {
 
         // Use session user ID or dummy ID
         const userId = session?.user?.id || "temp-prod-user-id"
+        console.log("[API] Creating project for user:", userId);
 
         const project = await prisma.project.create({
             data: {
@@ -32,6 +33,7 @@ export async function POST(req: Request) {
                 styleType,
             },
         })
+        console.log("[API] Project created successfully:", project.id);
 
         // Parse back for response
         const responseProject = {
@@ -42,7 +44,7 @@ export async function POST(req: Request) {
 
         return NextResponse.json(responseProject)
     } catch (error) {
-        console.error("[PROJECTS_POST]", error)
+        console.error("[PROJECTS_POST] CRITICAL ERROR:", error)
         return new NextResponse("Internal Error", { status: 500 })
     }
 }

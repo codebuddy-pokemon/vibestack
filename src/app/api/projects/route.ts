@@ -5,23 +5,17 @@ import { prisma } from "@/lib/db"
 
 export async function POST(req: Request) {
     try {
-        console.log("[API] DATABASE_URL exists:", !!process.env.DATABASE_URL);
-        console.log("[API] DATABASE_URL prefix:", process.env.DATABASE_URL?.substring(0, 15));
-
         const session = await getServerSession(authOptions)
 
-        // Skip auth in development AND production temporarily for testing
-        // if (!session && process.env.NODE_ENV !== "development") {
-        //     return new NextResponse("Unauthorized", { status: 401 })
-        // }
+        if (!session) {
+            return new NextResponse("Unauthorized", { status: 401 })
+        }
 
         const body = await req.json()
         const { name, description, inputType, inputData, html, css, metadata, vibeScore, styleType } = body
 
-        // Use session user ID or dummy ID
-        // FORCE TEMP USER for debugging
-        const userId = "temp-prod-user-id";
-        console.log("[API] Creating project for user:", userId);
+        // Use session user ID
+        const userId = session.user.id
 
         const project = await prisma.project.create({
             data: {

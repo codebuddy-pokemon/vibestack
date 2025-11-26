@@ -1,13 +1,17 @@
-// prisma/schema.prisma
+// prisma/schema.prisma.postgres
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
+
+// NOTE: We use String for JSON fields and Enums to maintain compatibility with SQLite local dev
+// Postgres supports JSON/Enums natively, but using String ensures the generated Client types match exactly.
 
 model User {
   id            String    @id @default(cuid())
@@ -23,7 +27,7 @@ model User {
   stripeSubscriptionId   String?   @unique
   stripePriceId          String?
   stripeCurrentPeriodEnd DateTime?
-  plan                   Plan      @default(FREE)
+  plan                   String    @default("FREE") 
   
   // Relations
   accounts      Account[]
@@ -31,12 +35,6 @@ model User {
   projects      Project[]
   templates     Template[]
   exports       Export[]
-}
-
-enum Plan {
-  FREE
-  PRO
-  AGENCY
 }
 
 model Account {
@@ -73,17 +71,17 @@ model Project {
   description String?
   
   // Input data
-  inputType   InputType
-  inputData   Json      // Stores screenshot URL, text prompt, or URL
+  inputType   String   
+  inputData   String   @db.Text // JSON string
   
   // Generated output
-  html        String    @db.Text
-  css         String    @db.Text
-  metadata    Json      // Colors, fonts, layout structure
+  html        String   @db.Text
+  css         String   @db.Text
+  metadata    String   @db.Text // JSON string
   
   // Vibe scoring
-  vibeScore   Int?      // 0-100
-  styleType   String?   // "brutalist", "glassmorphism", etc.
+  vibeScore   Int?      
+  styleType   String?   
   
   // Status
   isPublic    Boolean   @default(false)
@@ -101,14 +99,6 @@ model Project {
   @@index([isPublic])
 }
 
-enum InputType {
-  TEXT
-  SCREENSHOT
-  SKETCH
-  URL
-  PALETTE
-}
-
 model Template {
   id          String   @id @default(cuid())
   userId      String?
@@ -118,12 +108,12 @@ model Template {
   
   html        String   @db.Text
   css         String   @db.Text
-  metadata    Json
+  metadata    String   @db.Text
   
   styleType   String
   isPremium   Boolean  @default(false)
   isPublic    Boolean  @default(true)
-  price       Int?     // in cents
+  price       Int?     
   downloads   Int      @default(0)
   
   createdAt   DateTime @default(now())
@@ -140,7 +130,7 @@ model Export {
   userId    String
   projectId String
   
-  format    ExportFormat
+  format    String   
   fileUrl   String?
   
   createdAt DateTime @default(now())
@@ -149,11 +139,4 @@ model Export {
   project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
   
   @@index([userId])
-}
-
-enum ExportFormat {
-  HTML
-  REACT
-  NEXTJS
-  ZIP
 }

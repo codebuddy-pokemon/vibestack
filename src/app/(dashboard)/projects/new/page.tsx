@@ -190,6 +190,29 @@ function NewProjectContent() {
             setShowPreview(true)
             toast.success("Project generated successfully!")
 
+            // Save to Database
+            try {
+                await fetch("/api/projects", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        name: prompt ? (prompt.length > 30 ? prompt.substring(0, 30) + "..." : prompt) : "Untitled Project",
+                        description: prompt,
+                        inputType: activeTab === "text" ? "TEXT" : "SCREENSHOT",
+                        inputData: activeTab === "text" ? prompt : "image-url-placeholder", // TODO: Handle image upload URL
+                        html: data.html,
+                        css: data.css,
+                        metadata: { style: styleToUse },
+                        vibeScore: 85, // Placeholder
+                        styleType: styleToUse
+                    })
+                });
+                console.log("Project saved to database");
+            } catch (saveError) {
+                console.error("Failed to save project:", saveError);
+                toast.error("Project generated but failed to save.");
+            }
+
         } catch (error) {
             console.error(error)
             toast.error("Failed to generate project. Please try again.")

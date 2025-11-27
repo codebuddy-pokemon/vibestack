@@ -8,7 +8,7 @@ import { prisma } from "@/lib/db"
 
 export const authOptions = {
     // Don't use adapter with CredentialsProvider
-    // adapter: PrismaAdapter(prisma),
+    adapter: PrismaAdapter(prisma),
     session: {
         strategy: "jwt" as const,
     },

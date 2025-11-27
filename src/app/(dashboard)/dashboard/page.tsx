@@ -190,7 +190,9 @@ export default function DashboardPage() {
                             <Layout className="w-6 h-6 text-muted-foreground" />
                             Recent Projects
                         </h2>
-                        <Button variant="outline" size="sm" className="rounded-full">View All</Button>
+                        <Link href="/projects">
+                            <Button variant="outline" size="sm" className="rounded-full">View All</Button>
+                        </Link>
                     </div>
 
                     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">

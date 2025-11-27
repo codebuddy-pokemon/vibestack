@@ -1,12 +1,12 @@
-"use client"
-
 import { useEffect, useState } from "react"
 import { useParams, useRouter } from "next/navigation"
 import { Preview } from "@/components/editor/preview"
 import { Button } from "@/components/ui/button"
-import { ArrowLeft, Save, Share2, Download, Code } from "lucide-react"
+import { ArrowLeft, Save, Share2, Download, Code, Eye } from "lucide-react"
 import Link from "next/link"
 import { toast } from "sonner"
+import { DownloadButton } from "@/components/DownloadButton"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 
 interface Project {
     id: string
@@ -20,6 +20,7 @@ export default function EditorPage() {
     const router = useRouter()
     const [project, setProject] = useState<Project | null>(null)
     const [loading, setLoading] = useState(true)
+    const [viewMode, setViewMode] = useState<"preview" | "code">("preview")
 
     useEffect(() => {
         const fetchProject = async () => {
@@ -68,18 +69,18 @@ export default function EditorPage() {
                 </div>
 
                 <div className="flex items-center gap-3">
-                    <Button variant="outline" size="sm" className="border-white/20 text-white hover:bg-white/10">
-                        <Code className="w-4 h-4 mr-2" />
-                        Code
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        className="border-white/20 text-white hover:bg-white/10"
+                        onClick={() => setViewMode(viewMode === "preview" ? "code" : "preview")}
+                    >
+                        {viewMode === "preview" ? <Code className="w-4 h-4 mr-2" /> : <Eye className="w-4 h-4 mr-2" />}
+                        {viewMode === "preview" ? "View Code" : "View Preview"}
                     </Button>
-                    <Button variant="outline" size="sm" className="border-white/20 text-white hover:bg-white/10">
-                        <Share2 className="w-4 h-4 mr-2" />
-                        Share
-                    </Button>
-                    <Button variant="outline" size="sm" className="border-white/20 text-white hover:bg-white/10">
-                        <Download className="w-4 h-4 mr-2" />
-                        Export
-                    </Button>
+
+                    <DownloadButton html={project.html} css={project.css} projectName={project.name} />
+
                     <Button className="bg-theme-accent text-black hover:bg-[#b3e600] font-bold">
                         <Save className="w-4 h-4 mr-2" />
                         Save Changes
@@ -90,7 +91,28 @@ export default function EditorPage() {
             {/* Main Content */}
             <div className="flex-1 overflow-hidden p-6 bg-[#0a0a0a]">
                 <div className="w-full h-full max-w-[1600px] mx-auto">
-                    <Preview html={project.html} css={project.css} />
+                    {viewMode === "preview" ? (
+                        <Preview html={project.html} css={project.css} />
+                    ) : (
+                        <div className="grid grid-cols-2 gap-4 h-full">
+                            <div className="h-full flex flex-col">
+                                <div className="bg-white/5 px-4 py-2 text-xs font-mono text-muted-foreground border-b border-white/10">HTML</div>
+                                <textarea
+                                    className="flex-1 bg-[#111] text-gray-300 font-mono text-sm p-4 resize-none focus:outline-none"
+                                    readOnly
+                                    value={project.html}
+                                />
+                            </div>
+                            <div className="h-full flex flex-col">
+                                <div className="bg-white/5 px-4 py-2 text-xs font-mono text-muted-foreground border-b border-white/10">CSS</div>
+                                <textarea
+                                    className="flex-1 bg-[#111] text-gray-300 font-mono text-sm p-4 resize-none focus:outline-none"
+                                    readOnly
+                                    value={project.css}
+                                />
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

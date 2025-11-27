@@ -262,7 +262,7 @@ export default function LandingPage() {
       {/* 3D Background */}
       <HeroSplineBackground />
 
-      <main className="relative z-10 pt-32 pb-20 px-4 md:px-8 max-w-[1600px] mx-auto pointer-events-none">
+      <main className="relative z-10 pt-24 pb-20 px-4 md:px-8 max-w-[1600px] mx-auto pointer-events-none">
 
         {/* Hero Section */}
         <motion.div
@@ -270,15 +270,15 @@ export default function LandingPage() {
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="mb-24 pointer-events-none"
+          className="mb-16 pointer-events-none"
         >
-          <h1 className="w-fit mx-auto md:mx-0 text-[12vw] leading-[0.85] font-black tracking-tighter uppercase text-center md:text-left pointer-events-none">
+          <h1 className="w-fit mx-auto md:mx-0 text-[10vw] leading-[0.85] font-black tracking-tighter uppercase text-center md:text-left pointer-events-none">
             <span className="block text-transparent bg-clip-text bg-gradient-to-b from-foreground to-muted-foreground">Generate.</span>
             <span className="block text-theme-accent">Remix.</span>
             <span className="block text-transparent bg-clip-text bg-gradient-to-b from-foreground to-muted-foreground">Deploy.</span>
           </h1>
-          <div className="w-full mx-auto md:mx-0 mt-8 flex flex-col gap-8 items-start pointer-events-none">
-            <p className="text-muted-foreground text-xl md:text-2xl max-w-2xl font-light leading-tight text-center md:text-left">
+          <div className="w-full mx-auto md:mx-0 mt-8 flex flex-col gap-6 items-start pointer-events-none">
+            <p className="text-muted-foreground text-lg md:text-xl max-w-2xl font-light leading-tight text-center md:text-left">
               The AI-powered landing page builder that passes the vibe check.
               Turn text, screenshots, or sketches into production code instantly.
             </p>

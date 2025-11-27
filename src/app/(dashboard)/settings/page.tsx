@@ -37,6 +37,23 @@ export default function SettingsPage() {
         toast.success("Settings saved successfully")
     }
 
+    const handlePortal = async () => {
+        try {
+            const res = await fetch("/api/stripe/portal", {
+                method: "POST",
+            });
+            const data = await res.json();
+            if (data.url) {
+                window.location.href = data.url;
+            } else {
+                toast.error("Failed to open portal");
+            }
+        } catch (error) {
+            console.error(error);
+            toast.error("Something went wrong");
+        }
+    };
+
     return (
         <div className="container max-w-4xl mx-auto py-12 px-4 space-y-8">
             <div className="space-y-2">
@@ -139,12 +156,16 @@ export default function SettingsPage() {
                                     <p className="font-medium">Current Plan</p>
                                     <p className="text-2xl font-bold text-theme-accent">{usageData?.plan || "Loading..."}</p>
                                 </div>
-                                {usageData?.plan === "FREE" && (
+                                {usageData?.plan === "FREE" ? (
                                     <Link href="/pricing">
                                         <Button className="bg-theme-accent text-black hover:bg-theme-accent/90">
                                             Upgrade to Pro <Zap className="w-4 h-4 ml-2" />
                                         </Button>
                                     </Link>
+                                ) : (
+                                    <Button onClick={handlePortal} variant="outline" className="border-white/20">
+                                        Manage Subscription
+                                    </Button>
                                 )}
                             </div>
 

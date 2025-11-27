@@ -16,6 +16,7 @@ export const authOptions = {
         CredentialsProvider({
             name: "Dev Login",
             credentials: {
+                name: { label: "Name", type: "text", placeholder: "John Doe" },
                 email: { label: "Email", type: "text", placeholder: "dev@example.com" },
                 password: { label: "Password", type: "password" }
             },
@@ -27,7 +28,7 @@ export const authOptions = {
                     update: {},
                     create: {
                         email: credentials?.email || "dev@example.com",
-                        name: "Dev User",
+                        name: credentials?.name || "Dev User",
                         image: "https://github.com/shadcn.png",
                     },
                 })
@@ -37,11 +38,14 @@ export const authOptions = {
             }
         }),
         // Note: OAuth and Email providers require PrismaAdapter
-        // Uncomment and configure these for production:
-        // GoogleProvider({
-        //     clientId: process.env.GOOGLE_CLIENT_ID || "",
-        //     clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
-        // }),
+        GoogleProvider({
+            clientId: process.env.GOOGLE_CLIENT_ID || "",
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+        }),
+        GitHubProvider({
+            clientId: process.env.GITHUB_ID || "",
+            clientSecret: process.env.GITHUB_SECRET || "",
+        }),
     ],
     callbacks: {
         async jwt({ token, user }: any) {

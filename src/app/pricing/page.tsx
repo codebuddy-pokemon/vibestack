@@ -153,7 +153,7 @@ export default function PricingPage() {
                                     </ul>
                                 </div>
 
-                                <Link href={plan.name === "Enterprise" ? "mailto:sales@vibestack.ai" : "/login"}>
+                                <Link href={plan.name === "Enterprise" ? "mailto:sales@vibestack.ai" : `/register?plan=${plan.name.toUpperCase()}`}>
                                     <Button
                                         className={buttonClass}
                                         onMouseEnter={() => setHoveredPlan(plan.name)}

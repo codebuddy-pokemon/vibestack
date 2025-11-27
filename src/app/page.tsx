@@ -299,12 +299,12 @@ export default function LandingPage() {
                   name="prompt"
                   type="text"
                   placeholder="Describe your dream site..."
-                  className="w-full h-20 pl-8 pr-48 rounded-2xl border-2 border-white/10 bg-background/60 backdrop-blur-xl text-xl md:text-2xl font-medium focus:outline-none focus:border-theme-accent/50 focus:ring-0 shadow-2xl transition-all duration-300 placeholder:text-muted-foreground/50"
+                  className="w-full h-16 md:h-20 pl-6 md:pl-8 pr-36 md:pr-48 rounded-2xl border-2 border-white/10 bg-background/60 backdrop-blur-xl text-lg md:text-2xl font-medium focus:outline-none focus:border-theme-accent/50 focus:ring-0 shadow-2xl transition-all duration-300 placeholder:text-muted-foreground/50"
                   autoComplete="off"
                 />
                 <button
                   type="submit"
-                  className="absolute right-3 top-3 bottom-3 px-8 bg-theme-accent text-black text-lg font-bold uppercase tracking-widest rounded-xl hover:scale-105 hover:shadow-[0_0_20px_rgba(204,255,0,0.4)] transition-all duration-300"
+                  className="absolute right-2 top-2 bottom-2 md:right-3 md:top-3 md:bottom-3 px-6 md:px-8 bg-theme-accent text-black text-sm md:text-lg font-bold uppercase tracking-widest rounded-xl hover:scale-105 hover:shadow-[0_0_20px_rgba(204,255,0,0.4)] transition-all duration-300"
                 >
                   Generate
                 </button>

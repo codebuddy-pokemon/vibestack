@@ -8,9 +8,28 @@ import Link from "next/link";
 
 import { useSession } from "next-auth/react";
 
+import { toast } from "sonner";
+
 export default function PricingPage() {
     const { data: session, status } = useSession();
     const [hoveredPlan, setHoveredPlan] = React.useState<string | null>(null);
+
+    const handleUpgrade = async () => {
+        try {
+            const res = await fetch("/api/stripe/checkout", {
+                method: "POST",
+            });
+            const data = await res.json();
+            if (data.url) {
+                window.location.href = data.url;
+            } else {
+                toast.error("Failed to start checkout");
+            }
+        } catch (error) {
+            console.error(error);
+            toast.error("Something went wrong");
+        }
+    };
 
     const plans = [
         {
@@ -156,21 +175,32 @@ export default function PricingPage() {
                                     </ul>
                                 </div>
 
-                                <Link href={
-                                    plan.name === "Enterprise"
-                                        ? "mailto:sales@vibestack.ai"
-                                        : (status === "authenticated" && plan.name === "Hobby")
-                                            ? "/projects/new"
-                                            : `/register?plan=${plan.name.toUpperCase()}`
-                                }>
+                                {plan.name === "Pro" && status === "authenticated" ? (
                                     <Button
                                         className={buttonClass}
+                                        onClick={handleUpgrade}
                                         onMouseEnter={() => setHoveredPlan(plan.name)}
                                         onMouseLeave={() => setHoveredPlan(null)}
                                     >
                                         {plan.cta}
                                     </Button>
-                                </Link>
+                                ) : (
+                                    <Link href={
+                                        plan.name === "Enterprise"
+                                            ? "mailto:sales@vibestack.ai"
+                                            : (status === "authenticated" && plan.name === "Hobby")
+                                                ? "/projects/new"
+                                                : `/register?plan=${plan.name.toUpperCase()}`
+                                    }>
+                                        <Button
+                                            className={buttonClass}
+                                            onMouseEnter={() => setHoveredPlan(plan.name)}
+                                            onMouseLeave={() => setHoveredPlan(null)}
+                                        >
+                                            {plan.cta}
+                                        </Button>
+                                    </Link>
+                                )}
                             </motion.div>
                         )
                     })}

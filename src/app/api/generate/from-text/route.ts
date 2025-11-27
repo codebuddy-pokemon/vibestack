@@ -10,12 +10,22 @@ export async function POST(req: Request) {
         const session = await getServerSession(authOptions);
         console.log("[API] Session:", session ? "Authenticated" : "No Session");
 
-        // Temporarily allow unauthenticated access for testing
-        // TODO: Re-enable auth in production
-        // if (!session && process.env.NODE_ENV !== "development") {
-        //     console.log("[API] Unauthorized access attempt");
-        //     return new NextResponse("Unauthorized", { status: 401 });
-        // }
+        if (!session && process.env.NODE_ENV !== "development") {
+            console.log("[API] Unauthorized access attempt");
+            return new NextResponse("Unauthorized", { status: 401 });
+        }
+
+        // Check usage limits
+        if (session?.user?.id) {
+            const { checkUsageLimit } = await import("@/lib/limits");
+            const allowed = await checkUsageLimit(session.user.id);
+            if (!allowed) {
+                return NextResponse.json(
+                    { error: "You have reached your free limit of 3 projects per month. Please upgrade to Pro for unlimited access.", upgrade: true },
+                    { status: 403 }
+                );
+            }
+        }
 
         const { prompt, style } = await req.json();
         console.log("[API] Received prompt:", prompt?.substring(0, 100));

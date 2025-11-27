@@ -11,6 +11,18 @@ export async function POST(req: Request) {
         return new NextResponse("Unauthorized", { status: 401 });
     }
 
+    // Check usage limits
+    if (session?.user?.id) {
+        const { checkUsageLimit } = await import("@/lib/limits");
+        const allowed = await checkUsageLimit(session.user.id);
+        if (!allowed) {
+            return NextResponse.json(
+                { error: "You have reached your free limit of 3 projects per month. Please upgrade to Pro for unlimited access.", upgrade: true },
+                { status: 403 }
+            );
+        }
+    }
+
     try {
         const { html, instruction } = await req.json();
 

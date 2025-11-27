@@ -277,8 +277,8 @@ export default function LandingPage() {
             <span className="block text-theme-accent">Remix.</span>
             <span className="block text-transparent bg-clip-text bg-gradient-to-b from-foreground to-muted-foreground">Deploy.</span>
           </h1>
-          <div className="w-fit mx-auto md:mx-0 mt-8 flex flex-col md:flex-row gap-6 items-start md:items-center pointer-events-none">
-            <p className="text-muted-foreground text-xl md:text-2xl max-w-xl font-light leading-tight text-center md:text-left">
+          <div className="w-full mx-auto md:mx-0 mt-8 flex flex-col gap-8 items-start pointer-events-none">
+            <p className="text-muted-foreground text-xl md:text-2xl max-w-2xl font-light leading-tight text-center md:text-left">
               The AI-powered landing page builder that passes the vibe check.
               Turn text, screenshots, or sketches into production code instantly.
             </p>

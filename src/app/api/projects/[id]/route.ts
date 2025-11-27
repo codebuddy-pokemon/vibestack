@@ -26,10 +26,19 @@ export async function GET(
             return new NextResponse("Project not found", { status: 404 })
         }
 
+        const safeParse = (val: string | null) => {
+            if (!val) return null;
+            try {
+                return JSON.parse(val);
+            } catch (e) {
+                return val; // Return as is if not valid JSON
+            }
+        };
+
         const parsedProject = {
             ...project,
-            inputData: project.inputData ? JSON.parse(project.inputData as string) : null,
-            metadata: project.metadata ? JSON.parse(project.metadata as string) : null,
+            inputData: safeParse(project.inputData as string),
+            metadata: safeParse(project.metadata as string),
         }
 
         return NextResponse.json(parsedProject)
@@ -71,10 +80,19 @@ export async function PATCH(
             },
         })
 
+        const safeParse = (val: string | null) => {
+            if (!val) return null;
+            try {
+                return JSON.parse(val);
+            } catch (e) {
+                return val; // Return as is if not valid JSON
+            }
+        };
+
         const parsedProject = {
             ...project,
-            inputData: project.inputData ? JSON.parse(project.inputData as string) : null,
-            metadata: project.metadata ? JSON.parse(project.metadata as string) : null,
+            inputData: safeParse(project.inputData as string),
+            metadata: safeParse(project.metadata as string),
         }
 
         return NextResponse.json(parsedProject)

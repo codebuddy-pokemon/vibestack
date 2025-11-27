@@ -6,7 +6,10 @@ import { Check, X, Zap } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 
+import { useSession } from "next-auth/react";
+
 export default function PricingPage() {
+    const { data: session, status } = useSession();
     const [hoveredPlan, setHoveredPlan] = React.useState<string | null>(null);
 
     const plans = [
@@ -153,7 +156,13 @@ export default function PricingPage() {
                                     </ul>
                                 </div>
 
-                                <Link href={plan.name === "Enterprise" ? "mailto:sales@vibestack.ai" : `/register?plan=${plan.name.toUpperCase()}`}>
+                                <Link href={
+                                    plan.name === "Enterprise"
+                                        ? "mailto:sales@vibestack.ai"
+                                        : (status === "authenticated" && plan.name === "Hobby")
+                                            ? "/projects/new"
+                                            : `/register?plan=${plan.name.toUpperCase()}`
+                                }>
                                     <Button
                                         className={buttonClass}
                                         onMouseEnter={() => setHoveredPlan(plan.name)}

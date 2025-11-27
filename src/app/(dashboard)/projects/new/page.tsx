@@ -55,11 +55,16 @@ function NewProjectContent() {
     const [isPublished, setIsPublished] = useState(false)
     const [loadingStep, setLoadingStep] = useState(0)
 
-    // Check for tab parameter in URL
+    // Check for tab and prompt parameter in URL
     useEffect(() => {
         const tab = searchParams.get('tab')
         if (tab === 'screenshot') {
             setActiveTab('screenshot')
+        }
+
+        const promptParam = searchParams.get('prompt')
+        if (promptParam) {
+            setPrompt(decodeURIComponent(promptParam))
         }
     }, [searchParams])
 

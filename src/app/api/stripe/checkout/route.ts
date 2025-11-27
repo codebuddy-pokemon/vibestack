@@ -16,7 +16,7 @@ export async function POST(req: Request) {
         }
 
         if (!PRO_PRICE_ID) {
-            return new NextResponse("Stripe Price ID not configured", { status: 500 });
+            return NextResponse.json({ error: "Stripe Price ID not configured" }, { status: 500 });
         }
 
         const checkoutSession = await stripe.checkout.sessions.create({

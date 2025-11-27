@@ -20,10 +20,10 @@ export default function PricingPage() {
                 method: "POST",
             });
             const data = await res.json();
-            if (data.url) {
+            if (res.ok && data.url) {
                 window.location.href = data.url;
             } else {
-                toast.error("Failed to start checkout");
+                toast.error(data.error || "Failed to start checkout");
             }
         } catch (error) {
             console.error(error);

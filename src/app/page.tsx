@@ -634,7 +634,7 @@ export default function LandingPage() {
             </Button>
           </Link>
           <div className="mt-12 text-muted-foreground text-sm font-mono">
-            VIBESTACK © 2024 — DESIGNED BY AI, BUILT FOR HUMANS.
+            VIBESTACK © 2025. EMPOWERING BUILDERS TO SHIP THE EXTRAORDINARY.
           </div>
         </motion.div>
 

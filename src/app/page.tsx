@@ -282,15 +282,46 @@ export default function LandingPage() {
               The AI-powered landing page builder that passes the vibe check.
               Turn text, screenshots, or sketches into production code instantly.
             </p>
-            <Link href="/dashboard" className="pointer-events-auto">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-8 py-4 bg-theme-accent text-black text-lg font-bold uppercase tracking-widest flex items-center gap-2 hover:shadow-[var(--glow-lg)] transition-shadow duration-300"
+            <div className="w-full max-w-2xl pointer-events-auto">
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const formData = new FormData(e.currentTarget);
+                  const prompt = formData.get('prompt');
+                  if (prompt) {
+                    window.location.href = `/projects/new?prompt=${encodeURIComponent(prompt.toString())}`;
+                  }
+                }}
+                className="relative flex items-center group"
               >
-                Start Building <ArrowRight className="w-5 h-5" />
-              </motion.button>
-            </Link>
+                <div className="absolute inset-0 bg-gradient-to-r from-theme-accent/30 to-purple-500/30 rounded-2xl blur-xl opacity-50 group-hover:opacity-75 transition-opacity duration-500"></div>
+                <input
+                  name="prompt"
+                  type="text"
+                  placeholder="Describe your dream site..."
+                  className="w-full h-20 pl-8 pr-48 rounded-2xl border-2 border-white/10 bg-background/60 backdrop-blur-xl text-xl md:text-2xl font-medium focus:outline-none focus:border-theme-accent/50 focus:ring-0 shadow-2xl transition-all duration-300 placeholder:text-muted-foreground/50"
+                  autoComplete="off"
+                />
+                <button
+                  type="submit"
+                  className="absolute right-3 top-3 bottom-3 px-8 bg-theme-accent text-black text-lg font-bold uppercase tracking-widest rounded-xl hover:scale-105 hover:shadow-[0_0_20px_rgba(204,255,0,0.4)] transition-all duration-300"
+                >
+                  Generate
+                </button>
+              </form>
+              <div className="mt-4 flex flex-wrap gap-3 text-sm text-muted-foreground font-mono pl-2">
+                <span className="opacity-50">Try:</span>
+                <button type="button" className="hover:text-theme-accent transition-colors border-b border-transparent hover:border-theme-accent" onClick={(e) => {
+                  const input = document.querySelector('input[name="prompt"]') as HTMLInputElement;
+                  if (input) input.value = "A portfolio for a sushi chef";
+                }}>"A portfolio for a sushi chef"</button>
+                <span className="opacity-50">•</span>
+                <button type="button" className="hover:text-theme-accent transition-colors border-b border-transparent hover:border-theme-accent" onClick={(e) => {
+                  const input = document.querySelector('input[name="prompt"]') as HTMLInputElement;
+                  if (input) input.value = "Cyberpunk crypto exchange";
+                }}>"Cyberpunk crypto exchange"</button>
+              </div>
+            </div>
           </div>
         </motion.div>
 

@@ -5,6 +5,7 @@ import GitHubProvider from "next-auth/providers/github"
 import EmailProvider from "next-auth/providers/email"
 import CredentialsProvider from "next-auth/providers/credentials"
 import { prisma } from "@/lib/db"
+import { compare } from "bcryptjs"
 
 export const authOptions = {
     // Don't use adapter with CredentialsProvider
@@ -21,20 +22,30 @@ export const authOptions = {
                 password: { label: "Password", type: "password" }
             },
             async authorize(credentials) {
-                // Create or return a dummy user - ENABLED FOR PRODUCTION LOGIN
-                // if (process.env.NODE_ENV === "development") {
-                const user = await prisma.user.upsert({
-                    where: { email: credentials?.email || "dev@example.com" },
-                    update: {},
-                    create: {
-                        email: credentials?.email || "dev@example.com",
-                        name: credentials?.name || "Dev User",
-                        image: "https://github.com/shadcn.png",
-                    },
-                })
-                return user
-                // }
-                // return null
+                if (!credentials?.email || !credentials?.password) {
+                    throw new Error("Invalid credentials");
+                }
+
+                const user = await prisma.user.findUnique({
+                    where: {
+                        email: credentials.email
+                    }
+                });
+
+                if (!user || !user.password) {
+                    throw new Error("Invalid credentials");
+                }
+
+                const isCorrectPassword = await compare(
+                    credentials.password,
+                    user.password
+                );
+
+                if (!isCorrectPassword) {
+                    throw new Error("Invalid credentials");
+                }
+
+                return user;
             }
         }),
         // Note: OAuth and Email providers require PrismaAdapter

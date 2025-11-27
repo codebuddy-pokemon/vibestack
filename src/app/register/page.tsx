@@ -24,21 +24,36 @@ function RegisterForm() {
         setIsLoading(true)
 
         try {
+            const res = await fetch("/api/register", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    name,
+                    email,
+                    password,
+                }),
+            })
+
+            if (!res.ok) {
+                const data = await res.json()
+                throw new Error(data.error || "Registration failed")
+            }
+
+            // Login after successful registration
             const result = await signIn("credentials", {
-                name,
                 email,
                 password,
                 redirect: false,
             })
 
             if (result?.error) {
-                toast.error("Registration failed")
+                toast.error("Login failed after registration")
             } else {
                 toast.success("Account created successfully!")
                 router.push("/projects/new")
             }
-        } catch (error) {
-            toast.error("An error occurred")
+        } catch (error: any) {
+            toast.error(error.message || "An error occurred")
         } finally {
             setIsLoading(false)
         }

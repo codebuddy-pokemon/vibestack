@@ -5,7 +5,7 @@ import GitHubProvider from "next-auth/providers/github"
 import EmailProvider from "next-auth/providers/email"
 import CredentialsProvider from "next-auth/providers/credentials"
 import { prisma } from "@/lib/db"
-import { compare } from "bcryptjs"
+import bcrypt from "bcryptjs"
 
 export const authOptions = {
     // Don't use adapter with CredentialsProvider
@@ -36,7 +36,7 @@ export const authOptions = {
                     throw new Error("Invalid credentials");
                 }
 
-                const isCorrectPassword = await compare(
+                const isCorrectPassword = await bcrypt.compare(
                     credentials.password,
                     user.password
                 );

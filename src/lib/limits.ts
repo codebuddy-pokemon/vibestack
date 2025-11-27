@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/db";
 
-export const MAX_FREE_PROJECTS = 3;
+export const MAX_FREE_PROJECTS = 7;
 
 export async function checkUsageLimit(userId: string): Promise<boolean> {
     const user = await prisma.user.findUnique({

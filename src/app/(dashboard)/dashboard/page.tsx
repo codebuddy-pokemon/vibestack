@@ -7,6 +7,8 @@ import { BentoGrid, BentoGridItem } from "@/components/dashboard/bento-grid";
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
 import { toast } from "sonner";
 
+import { ProjectThumbnail } from "@/components/dashboard/project-thumbnail";
+
 const templates = [
     { id: "saas", name: "SaaS Landing", icon: Layout, color: "bg-blue-500/10 text-blue-500" },
     { id: "portfolio", name: "Portfolio", icon: User, color: "bg-purple-500/10 text-purple-500" },
@@ -200,17 +202,21 @@ export default function DashboardPage() {
                             projects.map((project: any) => (
                                 <Link key={project.id} href={`/projects/${project.id}`}>
                                     <div className="group relative aspect-video rounded-2xl overflow-hidden border border-white/10 bg-white/5 hover:border-theme-accent/50 transition-all duration-300">
-                                        {project.inputData && !project.inputData.startsWith("http") ? (
-                                            <div className="absolute inset-0 bg-gradient-to-br from-theme-accent/5 to-purple-500/5" />
+                                        {project.html ? (
+                                            <ProjectThumbnail html={project.html} css={project.css} title={project.name} />
                                         ) : (
-                                            <img
-                                                src={project.inputData || "https://placehold.co/600x400/1a1a1a/666?text=Project"}
-                                                alt={project.name}
-                                                className="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-70 transition-opacity"
-                                            />
+                                            project.inputData && !project.inputData.startsWith("http") ? (
+                                                <div className="absolute inset-0 bg-gradient-to-br from-theme-accent/5 to-purple-500/5" />
+                                            ) : (
+                                                <img
+                                                    src={project.inputData || "https://placehold.co/600x400/1a1a1a/666?text=Project"}
+                                                    alt={project.name}
+                                                    className="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-70 transition-opacity"
+                                                />
+                                            )
                                         )}
 
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent p-6 flex flex-col justify-end">
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent p-6 flex flex-col justify-end opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                             <h3 className="text-lg font-bold text-white group-hover:text-theme-accent transition-colors truncate">
                                                 {project.name}
                                             </h3>

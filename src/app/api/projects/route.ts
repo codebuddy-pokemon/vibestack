@@ -72,10 +72,19 @@ export async function GET(req: Request) {
             },
         })
 
+        const safeParse = (val: string | null) => {
+            if (!val) return null;
+            try {
+                return JSON.parse(val);
+            } catch (e) {
+                return val; // Return as is if not valid JSON
+            }
+        };
+
         const parsedProjects = projects.map(p => ({
             ...p,
-            inputData: p.inputData ? JSON.parse(p.inputData as string) : null,
-            metadata: p.metadata ? JSON.parse(p.metadata as string) : null,
+            inputData: safeParse(p.inputData as string),
+            metadata: safeParse(p.metadata as string),
         }))
 
         return NextResponse.json(parsedProjects)

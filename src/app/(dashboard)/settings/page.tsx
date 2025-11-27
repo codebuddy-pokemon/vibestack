@@ -1,19 +1,37 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Bell, Shield, User, Monitor, Moon, Sun, Laptop, Key } from "lucide-react"
+import { Bell, Shield, User, Monitor, Moon, Sun, Laptop, Key, CreditCard, Zap } from "lucide-react"
 import { toast } from "sonner"
+import { Progress } from "@/components/ui/progress"
+import Link from "next/link"
 
 export default function SettingsPage() {
     const [apiKey, setApiKey] = useState("sk_live_****************************")
     const [emailNotifications, setEmailNotifications] = useState(true)
     const [marketingEmails, setMarketingEmails] = useState(false)
+    const [usageData, setUsageData] = useState<{ plan: string, usage: number, limit: number } | null>(null)
+
+    useEffect(() => {
+        const fetchUsage = async () => {
+            try {
+                const res = await fetch("/api/user/usage")
+                if (res.ok) {
+                    const data = await res.json()
+                    setUsageData(data)
+                }
+            } catch (error) {
+                console.error("Failed to fetch usage", error)
+            }
+        }
+        fetchUsage()
+    }, [])
 
     const handleSave = () => {
         toast.success("Settings saved successfully")
@@ -29,9 +47,10 @@ export default function SettingsPage() {
             </div>
 
             <Tabs defaultValue="general" className="w-full">
-                <TabsList className="grid w-full grid-cols-3 mb-8 bg-muted/50 p-1 rounded-xl">
+                <TabsList className="grid w-full grid-cols-4 mb-8 bg-muted/50 p-1 rounded-xl">
                     <TabsTrigger value="general" className="rounded-lg">General</TabsTrigger>
                     <TabsTrigger value="appearance" className="rounded-lg">Appearance</TabsTrigger>
+                    <TabsTrigger value="subscription" className="rounded-lg">Subscription</TabsTrigger>
                     <TabsTrigger value="api" className="rounded-lg">API & Security</TabsTrigger>
                 </TabsList>
 
@@ -102,6 +121,58 @@ export default function SettingsPage() {
                                 <Laptop className="w-8 h-8" />
                                 <span className="font-medium">System</span>
                             </button>
+                        </CardContent>
+                    </Card>
+                </TabsContent>
+
+                <TabsContent value="subscription" className="space-y-6">
+                    <Card className="border-white/10 bg-white/5 backdrop-blur-xl">
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-2">
+                                <CreditCard className="w-5 h-5" /> Current Plan
+                            </CardTitle>
+                            <CardDescription>Manage your subscription and usage.</CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-6">
+                            <div className="flex items-center justify-between p-4 rounded-lg border border-white/10 bg-background/50">
+                                <div>
+                                    <p className="font-medium">Current Plan</p>
+                                    <p className="text-2xl font-bold text-theme-accent">{usageData?.plan || "Loading..."}</p>
+                                </div>
+                                {usageData?.plan === "FREE" && (
+                                    <Link href="/pricing">
+                                        <Button className="bg-theme-accent text-black hover:bg-theme-accent/90">
+                                            Upgrade to Pro <Zap className="w-4 h-4 ml-2" />
+                                        </Button>
+                                    </Link>
+                                )}
+                            </div>
+
+                            {usageData && usageData.plan === "FREE" && (
+                                <div className="space-y-2">
+                                    <div className="flex justify-between text-sm">
+                                        <span>Monthly Usage</span>
+                                        <span className="text-muted-foreground">{usageData.usage} / {usageData.limit} Projects</span>
+                                    </div>
+                                    <Progress value={(usageData.usage / usageData.limit) * 100} className="h-2" />
+                                    <p className="text-xs text-muted-foreground">
+                                        Free plan includes {usageData.limit} AI generations per month.
+                                    </p>
+                                </div>
+                            )}
+
+                            {usageData && usageData.plan !== "FREE" && (
+                                <div className="space-y-2">
+                                    <div className="flex justify-between text-sm">
+                                        <span>Monthly Usage</span>
+                                        <span className="text-muted-foreground">{usageData.usage} Projects</span>
+                                    </div>
+                                    <Progress value={100} className="h-2 bg-theme-accent/20" />
+                                    <p className="text-xs text-muted-foreground">
+                                        You have unlimited access! 🚀
+                                    </p>
+                                </div>
+                            )}
                         </CardContent>
                     </Card>
                 </TabsContent>

@@ -51,7 +51,7 @@ export function DownloadButton({ html, css, projectName = "vibestack-project" }:
     return (
         <Button onClick={handleDownload} variant="outline" size="sm">
             <Download className="mr-2 h-4 w-4" />
-            Download Code (ZIP)
+            <span className="hidden md:inline">Download</span>
         </Button>
     )
 }

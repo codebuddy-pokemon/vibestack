@@ -465,7 +465,7 @@ function NewProjectContent() {
                             className="rounded-full bg-gradient-to-r from-purple-500/10 to-pink-500/10 border-purple-500/20 hover:border-purple-500/50"
                         >
                             <Shuffle className={cn("mr-2 h-4 w-4", isGenerating && "animate-spin")} />
-                            Vibe Shift
+                            <span className="hidden md:inline">Vibe Shift</span>
                         </Button>
                         <Button
                             onClick={handlePublish}
@@ -475,7 +475,7 @@ function NewProjectContent() {
                             className="rounded-full"
                         >
                             <Share2 className="mr-2 h-4 w-4" />
-                            {isPublished ? "Published" : "Publish"}
+                            <span className="hidden md:inline">{isPublished ? "Published" : "Publish"}</span>
                         </Button>
                         <Button
                             onClick={handleUndo}
@@ -485,12 +485,12 @@ function NewProjectContent() {
                             className="rounded-full"
                         >
                             <Undo2 className="mr-2 h-4 w-4" />
-                            Undo
+                            <span className="hidden md:inline">Undo</span>
                         </Button>
                         <DownloadButton html={generatedHtml} css={generatedCss} projectName="vibestack-project" />
                         <Button onClick={() => setShowPreview(false)} variant="ghost" size="sm" className="rounded-full hover:bg-destructive/10 hover:text-destructive">
                             <X className="mr-2 h-4 w-4" />
-                            Close
+                            <span className="hidden md:inline">Close</span>
                         </Button>
                     </div>
                 </div>

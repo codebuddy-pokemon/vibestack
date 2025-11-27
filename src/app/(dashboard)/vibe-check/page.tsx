@@ -136,10 +136,22 @@ export default function VibeCheckPage() {
                             <CardHeader>
                                 <CardTitle className="text-sm font-bold uppercase tracking-widest text-purple-500">AI Analysis</CardTitle>
                             </CardHeader>
-                            <CardContent>
-                                <p className="text-lg md:text-xl leading-relaxed text-foreground font-normal">
-                                    {vibeResult.explanation}
-                                </p>
+                            <CardContent className="pt-6 pb-8 px-6 md:px-10">
+                                <div className="space-y-6 max-w-prose mx-auto">
+                                    {vibeResult.explanation.split('\n').map((paragraph: string, i: number) => {
+                                        if (!paragraph.trim()) return null;
+                                        return (
+                                            <p key={i} className="text-sm md:text-base font-medium leading-relaxed text-foreground/90">
+                                                {paragraph.split(/(\*\*.*?\*\*)/).map((part, j) => {
+                                                    if (part.startsWith('**') && part.endsWith('**')) {
+                                                        return <strong key={j} className="text-foreground font-bold">{part.slice(2, -2)}</strong>;
+                                                    }
+                                                    return part;
+                                                })}
+                                            </p>
+                                        );
+                                    })}
+                                </div>
                             </CardContent>
                         </Card>
                     </div>

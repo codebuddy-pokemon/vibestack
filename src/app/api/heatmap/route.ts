@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { model } from "@/lib/ai/gemini";
+import { model, fallbackModel } from "@/lib/ai/gemini";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
@@ -7,9 +7,9 @@ export async function POST(req: Request) {
     const session = await getServerSession(authOptions);
 
     // Temporarily allow unauthenticated access for testing
-    // if (!session && process.env.NODE_ENV !== "development") {
-    //     return new NextResponse("Unauthorized", { status: 401 });
-    // }
+    if (!session && process.env.NODE_ENV !== "development") {
+        return new NextResponse("Unauthorized", { status: 401 });
+    }
 
     try {
         const formData = await req.formData();
@@ -23,14 +23,17 @@ export async function POST(req: Request) {
         const base64Image = buffer.toString("base64");
 
         const prompt = `
-            Analyze this UI screenshot and predict the top 3 areas that will capture user attention (focal points).
+            You are a Senior UX Researcher and Cognitive Science Expert. Analyze this UI screenshot to predict user attention patterns based on visual hierarchy, contrast, and Gestalt principles.
+
+            Identify the top 3 "Focal Points" where a user's eye will naturally land first.
+            
             Return ONLY a JSON array with this exact structure:
             [
                 { 
                     "x": 50, 
                     "y": 50, 
-                    "label": "Headline", 
-                    "reason": "High contrast and large typography" 
+                    "label": "Primary CTA", 
+                    "reason": "High contrast button with generous whitespace (Von Restorff effect)" 
                 }
             ]
             
@@ -38,15 +41,39 @@ export async function POST(req: Request) {
             Order them by intensity (most attention first).
         `;
 
-        const result = await model.generateContent([
-            prompt,
-            {
-                inlineData: {
-                    data: base64Image,
-                    mimeType: image.type,
+        let result;
+        try {
+            console.log("[HEATMAP] Attempting with Gemini 2.5...");
+            result = await model.generateContent([
+                prompt,
+                {
+                    inlineData: {
+                        data: base64Image,
+                        mimeType: image.type,
+                    },
                 },
-            },
-        ]);
+            ]);
+        } catch (primaryError) {
+            console.warn("[HEATMAP] Gemini 2.5 failed, switching to fallback (Gemini 1.5 Flash)...", primaryError);
+            try {
+                result = await fallbackModel.generateContent([
+                    prompt,
+                    {
+                        inlineData: {
+                            data: base64Image,
+                            mimeType: image.type,
+                        },
+                    },
+                ]);
+            } catch (fallbackError) {
+                console.error("[HEATMAP] Fallback model also failed:", fallbackError);
+                throw new Error("AI analysis failed. Please try again.");
+            }
+        }
+
+        if (!result || !result.response) {
+            throw new Error("No response from AI model");
+        }
 
         const response = result.response;
         const text = response.text();

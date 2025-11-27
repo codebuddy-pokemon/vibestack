@@ -50,6 +50,21 @@ export default function BrandMatchPage() {
         toast.success("Copied to clipboard!")
     }
 
+    // Dynamic Font Loading
+    const loadGoogleFont = (fontName: string) => {
+        if (!fontName) return
+        const link = document.createElement("link")
+        link.href = `https://fonts.googleapis.com/css2?family=${fontName.replace(/ /g, "+")}:wght@300;400;700;900&display=swap`
+        link.rel = "stylesheet"
+        document.head.appendChild(link)
+    }
+
+    // Load fonts when result changes
+    if (result?.fonts) {
+        if (result.fonts.primary) loadGoogleFont(result.fonts.primary)
+        if (result.fonts.secondary) loadGoogleFont(result.fonts.secondary)
+    }
+
     return (
         <div className="relative min-h-screen overflow-hidden">
             {/* Background Mesh */}
@@ -190,15 +205,35 @@ export default function BrandMatchPage() {
                                         <div className="space-y-2">
                                             <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground/50">Primary Font</p>
                                             <div className="p-6 rounded-2xl bg-white/5 border border-white/10">
-                                                <p className="text-4xl font-black mb-2 tracking-tight">{result.fonts?.primary}</p>
-                                                <p className="text-lg opacity-60 font-light">The quick brown fox jumps over the lazy dog.</p>
+                                                <p
+                                                    className="text-4xl font-black mb-2 tracking-tight"
+                                                    style={{ fontFamily: result.fonts?.primary }}
+                                                >
+                                                    {result.fonts?.primary}
+                                                </p>
+                                                <p
+                                                    className="text-lg opacity-60 font-light"
+                                                    style={{ fontFamily: result.fonts?.primary }}
+                                                >
+                                                    The quick brown fox jumps over the lazy dog.
+                                                </p>
                                             </div>
                                         </div>
                                         <div className="space-y-2">
                                             <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground/50">Secondary Font</p>
                                             <div className="p-6 rounded-2xl bg-white/5 border border-white/10">
-                                                <p className="text-3xl font-bold mb-2">{result.fonts?.secondary}</p>
-                                                <p className="text-lg opacity-60 font-light">The quick brown fox jumps over the lazy dog.</p>
+                                                <p
+                                                    className="text-3xl font-bold mb-2"
+                                                    style={{ fontFamily: result.fonts?.secondary }}
+                                                >
+                                                    {result.fonts?.secondary}
+                                                </p>
+                                                <p
+                                                    className="text-lg opacity-60 font-light"
+                                                    style={{ fontFamily: result.fonts?.secondary }}
+                                                >
+                                                    The quick brown fox jumps over the lazy dog.
+                                                </p>
                                             </div>
                                         </div>
                                     </div>

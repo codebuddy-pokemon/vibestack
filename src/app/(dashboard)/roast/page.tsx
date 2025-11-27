@@ -156,54 +156,66 @@ export default function RoastPage() {
                                         <Flame className="w-5 h-5 text-red-500" />
                                     </div>
                                     <div>
-                                        <CardTitle className="text-lg font-bold text-foreground">The Roast</CardTitle>
-                                        <p className="text-xs text-muted-foreground mt-0.5">AI-Generated Feedback</p>
+                                        <CardTitle className="text-lg font-bold text-foreground">The Verdict</CardTitle>
+                                        <p className="text-xs text-muted-foreground mt-0.5">AI Design Critique</p>
                                     </div>
                                 </div>
                             </CardHeader>
 
-                            <CardContent className="pt-6 pb-6">
-                                <blockquote className="border-l-4 border-red-500 pl-6 pr-4 py-2 space-y-4">
-                                    {roastResult.roast.split(/\.\s+/).filter((sentence: string) => sentence.trim()).map((sentence: string, i: number) => (
-                                        <p key={i} className="text-base md:text-lg leading-relaxed text-foreground/90">
-                                            {sentence.trim()}{sentence.trim().endsWith('.') ? '' : '.'}
-                                        </p>
-                                    ))}
-                                </blockquote>
+                            <CardContent className="pt-8 pb-8 px-6 md:px-10">
+                                <div className="space-y-6 max-w-prose mx-auto">
+                                    {roastResult.roast.split('\n').map((paragraph: string, i: number) => {
+                                        if (!paragraph.trim()) return null;
+                                        return (
+                                            <p key={i} className="text-sm md:text-base font-medium leading-relaxed text-foreground/90">
+                                                {paragraph.split(/(\*\*.*?\*\*)/).map((part, j) => {
+                                                    if (part.startsWith('**') && part.endsWith('**')) {
+                                                        return <strong key={j} className="text-foreground font-bold">{part.slice(2, -2)}</strong>;
+                                                    }
+                                                    return part;
+                                                })}
+                                            </p>
+                                        );
+                                    })}
+                                </div>
                             </CardContent>
                         </Card>
 
-                        <div className="grid md:grid-cols-2 gap-6">
+                        <div className="grid md:grid-cols-3 gap-6">
                             {/* Score Card */}
-                            <Card className="bg-white/5 backdrop-blur-md border-white/10 hover:bg-white/10 transition-colors">
+                            <Card className="bg-white/5 backdrop-blur-md border-white/10 hover:bg-white/10 transition-colors md:col-span-1">
                                 <CardHeader>
-                                    <CardTitle className="text-sm font-bold uppercase tracking-widest text-muted-foreground">Design Score</CardTitle>
+                                    <CardTitle className="text-sm font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+                                        <AlertTriangle className="w-4 h-4" /> Brutality Score
+                                    </CardTitle>
                                 </CardHeader>
-                                <CardContent className="flex items-center justify-center py-12">
+                                <CardContent className="flex flex-col items-center justify-center py-8">
                                     <div className="relative group cursor-default">
-                                        <div className="text-9xl font-black tracking-tighter bg-gradient-to-b from-foreground to-foreground/50 bg-clip-text text-transparent animate-in zoom-in duration-700">
+                                        <div className="text-8xl font-black tracking-tighter bg-gradient-to-b from-red-500 to-orange-500 bg-clip-text text-transparent animate-in zoom-in duration-700">
                                             <AnimatedScore score={roastResult.score} />
                                         </div>
-                                        <div className="absolute -top-6 -right-10 text-3xl font-bold text-muted-foreground rotate-12 animate-in fade-in slide-in-from-right duration-500 delay-700">
-                                            /100
+                                        <div className="text-sm font-bold text-muted-foreground uppercase tracking-widest mt-2 text-center">
+                                            out of 100
                                         </div>
                                     </div>
                                 </CardContent>
                             </Card>
 
                             {/* Improvements Card */}
-                            <Card className="bg-white/5 backdrop-blur-md border-white/10 hover:bg-white/10 transition-colors">
+                            <Card className="bg-white/5 backdrop-blur-md border-white/10 hover:bg-white/10 transition-colors md:col-span-2">
                                 <CardHeader>
-                                    <CardTitle className="text-sm font-bold uppercase tracking-widest text-muted-foreground">Quick Fixes</CardTitle>
+                                    <CardTitle className="text-sm font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+                                        <CheckCircle2 className="w-4 h-4" /> Actionable Fixes
+                                    </CardTitle>
                                 </CardHeader>
                                 <CardContent>
-                                    <ul className="space-y-3">
+                                    <ul className="grid gap-4">
                                         {roastResult.improvements?.map((item: string, i: number) => (
-                                            <li key={i} className="flex items-start gap-3 p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-colors group">
-                                                <div className="mt-0.5 min-w-6 min-h-6 rounded-full bg-red-500/20 border border-red-500/30 flex items-center justify-center group-hover:bg-red-500 transition-colors duration-300">
+                                            <li key={i} className="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/5 hover:border-red-500/30 hover:bg-white/10 transition-all duration-300 group">
+                                                <div className="mt-1 min-w-6 min-h-6 rounded-full bg-red-500/20 border border-red-500/30 flex items-center justify-center group-hover:bg-red-500 group-hover:scale-110 transition-all duration-300">
                                                     <span className="text-xs font-bold text-red-500 group-hover:text-white">{i + 1}</span>
                                                 </div>
-                                                <span className="text-sm md:text-base leading-relaxed text-foreground/90 group-hover:text-foreground transition-colors">{item}</span>
+                                                <span className="text-base font-medium text-foreground/80 group-hover:text-foreground transition-colors leading-relaxed">{item}</span>
                                             </li>
                                         ))}
                                     </ul>

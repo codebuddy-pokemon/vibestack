@@ -168,21 +168,17 @@ export default function HeatmapPage() {
                             </CardContent>
                         </Card>
 
-                        <div className="grid gap-6 md:grid-cols-3">
-                            {hotspots.map((spot: any, i: number) => (
-                                <Card key={i} className="bg-white/5 backdrop-blur-md border-white/10 hover:bg-white/10 transition-all duration-300 hover:-translate-y-1 group">
-                                    <CardContent className="p-8 flex items-start gap-6">
-                                        <div className="text-6xl font-black text-white/5 group-hover:text-white/10 transition-colors duration-300">
-                                            0{i + 1}
-                                        </div>
-                                        <div className="pt-2">
-                                            <h4 className="font-bold text-xl mb-2 text-white group-hover:text-orange-500 transition-colors">{spot.label}</h4>
-                                            <p className="text-base text-muted-foreground leading-relaxed">{spot.reason}</p>
-                                        </div>
-                                    </CardContent>
-                                </Card>
-                            ))}
-                        </div>
+                        {hotspots.map((spot: any, i: number) => (
+                            <Card key={i} className="bg-white/5 backdrop-blur-md border-white/10 hover:bg-white/10 transition-all duration-300 hover:-translate-y-1 group relative overflow-hidden">
+                                <div className="absolute -top-4 -right-4 text-9xl font-black text-white/[0.03] group-hover:text-white/[0.08] transition-colors duration-500 select-none pointer-events-none">
+                                    0{i + 1}
+                                </div>
+                                <CardContent className="p-8 relative z-10">
+                                    <h4 className="font-bold text-xl mb-3 text-white group-hover:text-orange-500 transition-colors">{spot.label}</h4>
+                                    <p className="text-base text-muted-foreground leading-relaxed text-left">{spot.reason}</p>
+                                </CardContent>
+                            </Card>
+                        ))}
                     </div>
                 )}
             </div>

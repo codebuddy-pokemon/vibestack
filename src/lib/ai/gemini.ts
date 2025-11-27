@@ -11,7 +11,7 @@ const genAI = new GoogleGenerativeAI(apiKey);
 
 export const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash-preview-09-2025" });
 export const proModel = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
-export const fallbackModel = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+export const fallbackModel = genAI.getGenerativeModel({ model: "gemini-1.5-flash-8b" });
 
 function fileToGenerativePart(buffer: Buffer, mimeType: string) {
   return {

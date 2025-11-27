@@ -20,20 +20,20 @@ export const authOptions = {
                 password: { label: "Password", type: "password" }
             },
             async authorize(credentials) {
-                // ONLY FOR DEVELOPMENT: Create or return a dummy user
-                if (process.env.NODE_ENV === "development") {
-                    const user = await prisma.user.upsert({
-                        where: { email: credentials?.email || "dev@example.com" },
-                        update: {},
-                        create: {
-                            email: credentials?.email || "dev@example.com",
-                            name: "Dev User",
-                            image: "https://github.com/shadcn.png",
-                        },
-                    })
-                    return user
-                }
-                return null
+                // Create or return a dummy user - ENABLED FOR PRODUCTION LOGIN
+                // if (process.env.NODE_ENV === "development") {
+                const user = await prisma.user.upsert({
+                    where: { email: credentials?.email || "dev@example.com" },
+                    update: {},
+                    create: {
+                        email: credentials?.email || "dev@example.com",
+                        name: "Dev User",
+                        image: "https://github.com/shadcn.png",
+                    },
+                })
+                return user
+                // }
+                // return null
             }
         }),
         // Note: OAuth and Email providers require PrismaAdapter

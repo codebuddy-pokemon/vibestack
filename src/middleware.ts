@@ -11,6 +11,5 @@ export const config = {
         "/dashboard/:path*",
         "/projects/:path*",
         "/settings/:path*",
-        "/gallery/:path*",
     ],
 }
